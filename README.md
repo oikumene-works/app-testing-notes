@@ -1,6 +1,6 @@
 # Testing Android apps with a person and Codex
 
-12 October 2026. This describes our practice on that date.
+15 October 2026. This describes our practice on that date.
 
 We use one person's questions and Codex's ability to operate software tools to
 investigate Android apps. We want to find out whether selected everyday tasks
@@ -101,6 +101,14 @@ external connection to confirm that it fails. The workstation can still
 download the approved APK or read public documentation through a separate
 connection. Network blocking requires its own setup and verification.
 
+For the [Wraith test](examples/wraith-odysseus.md), which needed a remote
+service, we used a gateway to restrict connections to the agreed destinations.
+The developer supplied a temporary account, and the test used fictional
+content within a small request limit. A separate question
+was whether the network recording covered the route the app actually used.
+That recording missed the app's Wi-Fi traffic, so the report kept its limits
+separate from the useful evidence supplied by the gateway.
+
 The clean system image can be reused. The temporary device's storage,
 installed test app, and session files are removed when the run ends. This
 makes it possible to keep useful tools while starting a later test with
@@ -193,7 +201,10 @@ We keep shared working instructions in text files, an app-specific record of
 what happened and what may happen next, and the original evidence behind each
 report. This lets a later conversation recover the relevant context. A
 report can include an **issue**, meaning a separately described problem in
-the developer's tracking system, with steps to reproduce it.
+a tracking system, with steps to reproduce it. We normally use the
+developer's tracker. For Wraith, the person had no login credentials for
+that tracker and chose this repository instead. The F-Droid summary explains
+the reason and links the findings; they remain reports in our own repository.
 
 Repeated work sometimes justifies a small helper. After the DumberKit test,
 Codex built a tool that saves a test phase's screenshot, UI tree, and
@@ -206,9 +217,11 @@ that its attachments are accessible and match the intended files. We retain
 that record alongside the test. Later corrections and retests keep their own
 dates and app versions.
 
-The [worked example](examples/dumberkit-contacts.md) follows one test through to
-cleanup and reporting. It also shows mistakes in our operation and the
-specific lesson we carried into the next test plan.
+The [DumberKit Contacts example](examples/dumberkit-contacts.md) follows a
+backup test through cleanup and reporting, including mistakes in our
+operation and a lesson for later test plans. The
+[Wraith example](examples/wraith-odysseus.md) examines the limits of network
+evidence and shows how the person's screenshot question improved the report.
 
 Codex wrote and translated this overview at the person's request, using the
 project's records and the linked documentation for tool explanations.
