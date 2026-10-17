@@ -1,6 +1,6 @@
 # Testing Android apps with a person and Codex
 
-15 October 2026. This describes our practice on that date.
+17 October 2026. This describes our practice on that date.
 
 We use one person's questions and Codex's ability to operate software tools to
 investigate Android apps. We want to find out whether selected everyday tasks
@@ -173,6 +173,22 @@ all five contacts, yet parts of two addresses were missing. Counting the
 contacts would have missed the problem. Comparing individual fields with the
 known starting values exposed it.
 
+The [PsyJournal test report](https://github.com/FSeixasPT/PsyJournal/issues/1)
+also records failures in the evidence tools themselves. Android's usual UI
+dump command could not obtain an idle screen while a live timer was active.
+Codex used an alternative that did not wait for idle, checked that the output
+was new and contained interface elements, and compared it with screenshots.
+An older tree, an empty tree, and black screenshots were not treated as proof
+of the app's visible state. A successful command alone is not enough.
+
+The person's question about PsyJournal's browser links led to a separate
+source-code review. An app's lack of Internet permission does not by itself
+answer what information it passes to another app that opens a link. Codex
+traced the addresses supplied by PsyJournal 12.0: the reviewed paths did not
+append diary entries, doses, or notes, but a selected article address could
+reveal the substance of interest. This was evidence about the app's URL
+construction; the test did not observe browser traffic or the linked sites.
+
 ## What the person contributes
 
 The person chooses what matters, considers Codex's proposal, and can redirect
@@ -216,6 +232,12 @@ When an approved report is published, Codex reads the public text and checks
 that its attachments are accessible and match the intended files. We retain
 that record alongside the test. Later corrections and retests keep their own
 dates and app versions.
+
+After PsyJournal, we agreed to publish an approved package in dependency
+order: attachments, the full report, and individual issues first; verify
+their contents and links; then publish the F-Droid MR summary with those
+links already included. This avoids a predictable follow-up edit while
+leaving room for later factual corrections.
 
 The [DumberKit Contacts example](examples/dumberkit-contacts.md) follows a
 backup test through cleanup and reporting, including mistakes in our
