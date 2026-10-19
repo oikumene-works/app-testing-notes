@@ -1,6 +1,6 @@
 # Testing Android apps with a person and Codex
 
-17 October 2026. This describes our practice on that date.
+19 October 2026. This describes our practice on that date.
 
 We use one person's questions and Codex's ability to operate software tools to
 investigate Android apps. We want to find out whether selected everyday tasks
@@ -201,6 +201,15 @@ Codex performed the technical test execution, evidence collection, analysis,
 and report writing in that example. Watching the emulator or approving the
 report did not constitute independent verification. Reports describe any
 human observation or independent check only when it actually occurred.
+
+Some questions also need a physical phone. In the
+[AutoScroller test](https://github.com/sebacoden/autoScroll/issues/1), the
+person performed swipes and three-finger taps while Codex prepared and
+navigated the phones, collected screen and input evidence, and analyzed
+the results. A touchscreen log established that three contacts overlapped;
+it did not establish which gesture reached the app. Comparing two phones
+did not isolate the operating system when the video app and installed
+services also differed.
 
 The work produces evidence about the tested app version and conditions.
 An emulator result alone does not establish how a physical phone feels to
