@@ -1,6 +1,6 @@
 # Testing Android apps with a person and Codex
 
-19 October 2026. This describes our practice on that date.
+20 October 2026. This describes our practice on that date.
 
 We use one person's questions and Codex's ability to operate software tools to
 investigate Android apps. We want to find out whether selected everyday tasks
@@ -210,6 +210,14 @@ the results. A touchscreen log established that three contacts overlapped;
 it did not establish which gesture reached the app. Comparing two phones
 did not isolate the operating system when the video app and installed
 services also differed.
+
+Audible behavior also needs a listener or an audio recording. In the
+[Gantry test](https://github.com/mesmerverse/gantry/issues/1), Codex posted
+synthetic notifications and inspected settings and logs; the person reported
+what the phone actually said and when the notification chime occurred. At
+the person's request, cases were repeated one at a time, with an answer
+before the next post. A successful speech call did not establish what was
+heard or when the sounds began.
 
 The work produces evidence about the tested app version and conditions.
 An emulator result alone does not establish how a physical phone feels to
