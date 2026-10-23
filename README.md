@@ -1,6 +1,6 @@
 # Testing Android apps with a person and Codex
 
-20 October 2026. This describes our practice on that date.
+23 October 2026. This describes our practice on that date.
 
 We use one person's questions and Codex's ability to operate software tools to
 investigate Android apps. We want to find out whether selected everyday tasks
@@ -44,6 +44,7 @@ tools, temporary device files, and retained reports. These are the main pieces:
 | --- | --- |
 | Codex | The assistant that plans and carries out the agreed work through available tools, then explains the results. |
 | Android Emulator | A program that runs a virtual Android device on the computer. We keep its screen visible in a window. |
+| Physical Android phone or tablet | An actual device connected for an agreed test. We record its starting settings, remove test data and restore changes while preserving unrelated content. |
 | Android system image and virtual device | The image supplies the Android operating system. The virtual device combines it with settings such as screen size and separate storage for the test. |
 | APK | An Android app installation file. We record exactly which APK we install so that the result can be tied to a particular version. |
 | ADB | Android Debug Bridge, a tool connecting the computer to Android. Codex uses it to install the app, send actions, and retrieve information. |
@@ -162,6 +163,17 @@ while its label is hidden behind another part of the screen. A list may
 look empty even though records have already been saved. We compare sources
 when the distinction affects the result.
 
+Our first physical-tablet check, on a Samsung SM-X210, showed why a larger
+screen is not enough to describe the test conditions. In
+[TEA Kids 1.1.6 / 62](https://github.com/alunoadsnoite/tea-mvp-childs/issues/4#issuecomment-6355504071),
+landscape at the existing 110% text size clipped Home content that the attempted
+vertical swipes did not reveal. At 200%, portrait also lost visible content.
+We recorded orientation, screen dimensions, effective display density and text
+scale together. A separate Help label existed in the UI tree and its target
+opened Help, yet the label was visually indistinguishable in the screenshot.
+These were two observations from one tablet configuration; their causes and
+behavior on other tablets were not established.
+
 Codex receives the observations that its tools return. It needs a fresh
 observation after an action that changes the screen or data. A command that
 completed successfully may still have entered text into the wrong field.
@@ -201,6 +213,13 @@ Codex performed the technical test execution, evidence collection, analysis,
 and report writing in that example. Watching the emulator or approving the
 report did not constitute independent verification. Reports describe any
 human observation or independent check only when it actually occurred.
+
+The person providing the tablet for the TEA Kids check had no knowledge of
+Portuguese, the app's interface language. Codex operated the app and interpreted
+its labels, retaining the original wording alongside English explanations.
+The person viewed the final state. This was scoped functional and layout
+evidence; it did not establish Portuguese-language quality, independent human
+verification or suitability for children.
 
 Some questions also need a physical phone. In the
 [AutoScroller test](https://github.com/sebacoden/autoScroll/issues/1), the
