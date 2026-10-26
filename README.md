@@ -1,6 +1,6 @@
 # Testing Android apps with a person and Codex
 
-23 October 2026. This describes our practice on that date.
+26 October 2026. This describes our practice on that date.
 
 We use one person's questions and Codex's ability to operate software tools to
 investigate Android apps. We want to find out whether selected everyday tasks
@@ -200,6 +200,16 @@ traced the addresses supplied by PsyJournal 12.0: the reviewed paths did not
 append diary entries, doses, or notes, but a selected article address could
 reveal the substance of interest. This was evidence about the app's URL
 construction; the test did not observe browser traffic or the linked sites.
+
+In the [Violentomètres 1.1.1 test](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/52094#note_4087047253),
+Android's system screenshot showed a black app area. Codex obtained readable
+images through the [emulator's own screenshot command](https://developer.android.com/studio/run/emulator-take-screenshots),
+with the app's default screenshot refusal and Android's `FLAG_SECURE`
+protection still enabled. Early captures showed a transition or the previous
+screen, so fresh images after visible changes were checked against the UI
+tree and window state. This established an observation method for the tested
+Android 14 emulator configuration. It did not establish screenshot access
+for ordinary Android apps or capture behavior on physical phones.
 
 ## What the person contributes
 
