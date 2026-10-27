@@ -1,6 +1,6 @@
 # Testing Android apps with a person and Codex
 
-26 October 2026. This describes our practice on that date.
+27 October 2026. This describes our practice on that date.
 
 We use one person's questions and Codex's ability to operate software tools to
 investigate Android apps. We want to find out whether selected everyday tasks
@@ -211,6 +211,15 @@ tree and window state. This established an observation method for the tested
 Android 14 emulator configuration. It did not establish screenshot access
 for ordinary Android apps or capture behavior on physical phones.
 
+In the [BetterLauncher 1.6.0 retest](https://github.com/pierspad/BetterLauncher/issues/7),
+Codex recorded settings crashes on an emulator and a physical phone before
+backup import. Three emulator crash stacks involved accessibility-node
+collection during UI-tree inspection. The report retained those reads as
+part of the reproduction conditions. No comparison without inspection was
+performed, so scrolling or tapping alone was not established as the cause.
+The settings failure was reported separately, and the earlier restore fix
+remained unverified because no backup was imported.
+
 ## What the person contributes
 
 The person chooses what matters, considers Codex's proposal, and can redirect
@@ -278,6 +287,13 @@ When an approved report is published, Codex reads the public text and checks
 that its attachments are accessible and match the intended files. We retain
 that record alongside the test. Later corrections and retests keep their own
 dates and app versions.
+
+In the [BetterLauncher publication](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/44511#note_4095997303),
+seven of nine separately hosted files matched the intended files byte for byte.
+The hosting service changed metadata in two JPEG images, while their encoded
+picture data and decoded pixels matched exactly. Codex recorded the original
+and served file hashes and verified the exact original images inside the
+[evidence ZIP](https://gitlab.com/-/project/36528/uploads/b1be1c65d5ea574e4853588aeecfd7ae/betterlauncher-1.6.0-settings-crash-report-and-evidence.zip).
 
 After PsyJournal, we agreed to publish an approved package in dependency
 order: attachments, the full report, and individual issues first; verify
