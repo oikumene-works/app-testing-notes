@@ -1,6 +1,6 @@
 # Testing Android apps with a person and Codex
 
-27 October 2026. This describes our practice on that date.
+31 October 2026. This describes our practice on that date.
 
 We use one person's questions and Codex's ability to operate software tools to
 investigate Android apps. We want to find out whether selected everyday tasks
@@ -174,6 +174,15 @@ opened Help, yet the label was visually indistinguishable in the screenshot.
 These were two observations from one tablet configuration; their causes and
 behavior on other tablets were not established.
 
+In the [31 October BetterLauncher 1.6.2 retest](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/44511#note_4129148814),
+Codex compared retained before-and-after screenshots with their recorded
+conditions. Home foregrounds improved in the sampled scenes, while Settings
+controls remained hard to distinguish despite working and respecting system
+navigation. Theme, app text size, wallpaper and opacity affected the comparison.
+Prior Home opacity had not been separately measured, and the old and new
+landscape scenes used different themes and text sizes. The report states
+those limits rather than treating the scenes as identical.
+
 Codex receives the observations that its tools return. It needs a fresh
 observation after an action that changes the screen or data. A command that
 completed successfully may still have entered text into the wrong field.
@@ -294,6 +303,15 @@ The hosting service changed metadata in two JPEG images, while their encoded
 picture data and decoded pixels matched exactly. Codex recorded the original
 and served file hashes and verified the exact original images inside the
 [evidence ZIP](https://gitlab.com/-/project/36528/uploads/b1be1c65d5ea574e4853588aeecfd7ae/betterlauncher-1.6.0-settings-crash-report-and-evidence.zip).
+
+The same [BetterLauncher 1.6.2 publication](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/44511#note_4129148814)
+also separated file integrity from recipient access. After anonymous
+downloads returned HTTP 429, Codex downloaded the archive while authenticated
+and verified its exact bytes and all content hashes. The person explicitly
+approved completing publication with anonymous availability still unverified.
+That exception is recorded in the publication receipt. An authenticated
+match establishes the content served through that route; it does not prove
+that a reader without an account can download it.
 
 After PsyJournal, we agreed to publish an approved package in dependency
 order: attachments, the full report, and individual issues first; verify
