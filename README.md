@@ -1,6 +1,6 @@
 # Testing Android apps with a person and Codex
 
-31 October 2026. This describes our practice on that date.
+3 November 2026. This describes our practice on that date.
 
 We use one person's questions and Codex's ability to operate software tools to
 investigate Android apps. We want to find out whether selected everyday tasks
@@ -194,6 +194,16 @@ all five contacts, yet parts of two addresses were missing. Counting the
 contacts would have missed the problem. Comparing individual fields with the
 known starting values exposed it.
 
+The [PillSOS 3.3 / 97 retest](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/53882#note_4149289891)
+also distinguished a saved reminder, its pending Android schedule, and an
+actual delivery. Tomorrow's occurrence remained scheduled after today's
+reminder was dismissed; next-day delivery was not observed. A separate pair
+checked whether dismissing reminder A affected reminder B. Codex inspected
+B's pending schedule and observed B deliver at its due time, without opening
+or editing the app between dismissal and delivery. Those actions could
+refresh schedules and conceal interference between reminders. The result
+covers that pair and sequence, not long-term reminder reliability.
+
 The [PsyJournal test report](https://github.com/FSeixasPT/PsyJournal/issues/1)
 also records failures in the evidence tools themselves. Android's usual UI
 dump command could not obtain an idle screen while a live timer was active.
@@ -265,6 +275,17 @@ what the phone actually said and when the notification chime occurred. At
 the person's request, cases were repeated one at a time, with an answer
 before the next post. A successful speech call did not establish what was
 heard or when the sounds began.
+
+In the PillSOS tests, the audio setup failed at two different layers.
+After app data was cleared in [3.2 / 96](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/53882#note_4147254249),
+Codex missed the app's return to Maximum Volume; one reminder raised the
+alarm and ring levels. In [3.3 / 97](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/53882#note_4149289891),
+the emulator's stream was muted on the host computer despite the Android
+settings. The approved repeat supplied recorded output after unmuting.
+Before playback, checks therefore need to cover the app's mode, Android's
+relevant volume and output route, and the host's emulator stream. Clearing
+app data invalidates earlier app-setting checks. A recording and the person's
+hearing remain separately attributed observations.
 
 The work produces evidence about the tested app version and conditions.
 An emulator result alone does not establish how a physical phone feels to
