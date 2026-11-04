@@ -1,6 +1,6 @@
 # Testing Android apps with a person and Codex
 
-3 November 2026. This describes our practice on that date.
+4 November 2026. This describes our practice on that date.
 
 We use one person's questions and Codex's ability to operate software tools to
 investigate Android apps. We want to find out whether selected everyday tasks
@@ -203,6 +203,26 @@ B's pending schedule and observed B deliver at its due time, without opening
 or editing the app between dismissal and delivery. Those actions could
 refresh schedules and conceal interference between reminders. The result
 covers that pair and sequence, not long-term reminder reliability.
+
+In focused supplementary checks of
+[Heimdall 1.0.4 / 5](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/49431#note_4156915767),
+following [junkerderprovinz's review of 1.0.3](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/49431#note_4116396624),
+Codex captured SMS delivery evidence before changing filtering rules. The app
+reclassified old messages when rules changed, so their final labels did not
+describe the original delivery decisions. The active rule, stored-message
+checks and notifications were retained with each comparison. When an app
+reevaluates past events, evidence needs to preserve the configuration and
+outcome at the time of the event, before a later change alters its presentation.
+
+The same round's [legacy-rule comparison](https://github.com/monkeyscript/heimdall/issues/3)
+started with a focused source review. A cleanup check removed stored keywords
+when they equalled an exact former default set. On the fresh installation,
+manually adding the eighth word cleared all rules; the same SMS was blocked
+before clearing and delivered afterward. This is extremely unlikely in
+ordinary use, but possible with those eight particular words and no others.
+The lesson is to consider whether ordinary user actions can recreate a
+configuration that triggers legacy cleanup. One targeted comparison can
+answer that question; this fresh-install result did not verify an upgrade path.
 
 The [PsyJournal test report](https://github.com/FSeixasPT/PsyJournal/issues/1)
 also records failures in the evidence tools themselves. Android's usual UI
