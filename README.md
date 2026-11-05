@@ -1,6 +1,6 @@
 # Testing Android apps with a person and Codex
 
-4 November 2026. This describes our practice on that date.
+5 November 2026. This describes our practice on that date.
 
 We use one person's questions and Codex's ability to operate software tools to
 investigate Android apps. We want to find out whether selected everyday tasks
@@ -258,6 +258,19 @@ part of the reproduction conditions. No comparison without inspection was
 performed, so scrolling or tapping alone was not established as the cause.
 The settings failure was reported separately, and the earlier restore fix
 remained unverified because no backup was imported.
+
+### Before a time-sensitive test
+
+Before a timed step, Codex starts timestamped event recording and checks that
+the recorder is running. For example, when testing a reminder, we record the
+action that sets it and keep recording through its expected delivery time.
+If the notification appears, we can compare the two timestamps even if the
+chat paused in between.
+
+Codex can ask the person running the test at any time whether the chat's
+context indicator shows that the conversation is getting full. If a context
+check or compaction would help, we do it before the timed step or between
+trials.
 
 ## What the person contributes
 
