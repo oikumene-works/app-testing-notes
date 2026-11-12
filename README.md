@@ -1,6 +1,6 @@
 # Testing Android apps with a person and Codex
 
-5 November 2026. This describes our practice on that date.
+12 November 2026. This describes our practice on that date.
 
 We use one person's questions and Codex's ability to operate software tools to
 investigate Android apps. We want to find out whether selected everyday tasks
@@ -194,6 +194,16 @@ all five contacts, yet parts of two addresses were missing. Counting the
 contacts would have missed the problem. Comparing individual fields with the
 known starting values exposed it.
 
+A restore also needs checking where the data was previously sent. In the
+[BP Digitizer 1.6.4 test](https://github.com/zandaulion/BloodPressureMonitor/issues/14),
+Codex first checked that repeating a sync left the sampled Health Connect
+counts unchanged. It then kept those external records, cleared the app's
+local data, restored two readings in reverse order and synced again. The
+local IDs changed and Health Connect showed a duplicate heart-rate entry.
+This adds a boundary to backup testing: compare the retained destination
+before and after restoration and sync, as well as the restored local fields.
+The test did not establish the identity of every blood-pressure record.
+
 The [PillSOS 3.3 / 97 retest](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/53882#note_4149289891)
 also distinguished a saved reminder, its pending Android schedule, and an
 actual delivery. Tomorrow's occurrence remained scheduled after today's
@@ -267,6 +277,16 @@ action that sets it and keep recording through its expected delivery time.
 If the notification appears, we can compare the two timestamps even if the
 chat paused in between.
 
+Permission changes and old notification buttons also need separate checks.
+In BP Digitizer, restoring exact-alarm permission removed the warning but
+[did not recreate the canceled schedules](https://github.com/zandaulion/BloodPressureMonitor/issues/17).
+Codex observed that scheduling state; it did not wait for or claim a missed
+next-day reminder. Separately, an old notification's Snooze button
+[scheduled and delivered a new reminder after reminders were switched off](https://github.com/zandaulion/BloodPressureMonitor/issues/20).
+Codex removed the old notification and verified its absence before the due
+time, so a retained notification could not be mistaken for a new delivery.
+These cases distinguish the visible setting, pending work and actual delivery.
+
 Codex can ask the person running the test at any time whether the chat's
 context indicator shows that the conversation is getting full. If a context
 check or compaction would help, we do it before the timed step or between
@@ -300,6 +320,17 @@ the results. A touchscreen log established that three contacts overlapped;
 it did not establish which gesture reached the app. Comparing two phones
 did not isolate the operating system when the video app and installed
 services also differed.
+
+For a brief physical event, the person may need to trigger the critical
+action directly. In the
+[BP Digitizer camera checks](https://gitlab.com/-/project/36528/uploads/9cbfd59a02b19d2e32090537612880f2/BP-Digitizer-1.6.4-test-report-2026-11-12.md),
+the Beurer BM 28 display switched off quickly, making chat-coordinated
+capture unreliable. The person operated the shutter for specified cases
+while Codex recorded and inspected the sequence. Codex compared recognized
+values with the display in the captured image, rather than an earlier
+message that could refer to a different memory reading. Three qualified
+images matched. Camera evidence remains private; the public report describes
+the results and limits without providing those images for independent review.
 
 Audible behavior also needs a listener or an audio recording. In the
 [Gantry test](https://github.com/mesmerverse/gantry/issues/1), Codex posted
