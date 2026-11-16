@@ -269,6 +269,35 @@ performed, so scrolling or tapping alone was not established as the cause.
 The settings failure was reported separately, and the earlier restore fix
 remained unverified because no backup was imported.
 
+### Speech input, capture and text delivery
+
+In the [Offline Voice Input 0.2.3 test](https://gitlab.com/-/project/36528/uploads/23392d155271c57cb51fcbc5bd1e3fb1/Offline-Voice-Input-0.2.3-test-report.md),
+the person recorded short English and Finnish passages. Codex reused the clips
+for file, caption and speaker-to-microphone checks. The person heard all four
+clips and noticed no omissions, but could not certify every word from memory.
+A script describes intended speech; checking the saved audio is a separate
+step. Keep the text visible while the person reads, and compare one short
+passage at a time when exact wording matters. Record uncertainty instead of turning a
+general listening confirmation into a word-for-word check.
+
+The audio route also changes what a comparison establishes. Reading a file,
+capturing internal playback and replaying sound through a speaker into a
+microphone are different paths. Background music affected early microphone
+attempts; Codex excluded them and repeated the relevant checks in quiet
+conditions. In other attempts, Android silenced the target microphone or
+muted the helper player. Check source playback and capture state before
+attributing unexpected text or omissions to recognition. A recording indicator
+alone does not establish that speech reached the recognizer.
+
+Processing and delivery need separate evidence too. After recording stopped,
+[going Home during processing left the fields unchanged](https://github.com/notune/android_transcribe_app/issues/140),
+whereas [changing focus sent the result to the new field](https://github.com/notune/android_transcribe_app/issues/141).
+Codex used distinct field markers, screenshots and text readback to establish
+the destinations. For asynchronous text input, retain the request and input
+identity, check focus at the relevant transitions, and read the final field
+contents. These results concern one phone, operating system and model;
+they do not measure general multilingual accuracy or cross-app behavior.
+
 ### Before a time-sensitive test
 
 Before a timed step, Codex starts timestamped event recording and checks that
