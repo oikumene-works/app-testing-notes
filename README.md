@@ -1,6 +1,6 @@
 # Testing Android apps with a person and Codex
 
-12 November 2026. This describes our practice on that date.
+16 November 2026. This describes our practice on that date.
 
 We use one person's questions and Codex's ability to operate software tools to
 investigate Android apps. We want to find out whether selected everyday tasks
@@ -350,6 +350,32 @@ Before playback, checks therefore need to cover the app's mode, Android's
 relevant volume and output route, and the host's emulator stream. Clearing
 app data invalidates earlier app-setting checks. A recording and the person's
 hearing remain separately attributed observations.
+
+Choosing the sound also affects whether a person can follow an audio test.
+In the [Quiet Night 2.2.0 test and hearing retest](https://gitlab.com/-/project/36528/uploads/3498ad1f1e4c0f0b5e246032eace723e/QuietNight-2.2.0-test-report.md),
+the person could not reliably judge a constant tone amid intermittent desktop
+hum. At their request, Codex substituted a repeating melody without raising
+the phone's 2/25 media setting or the file's average digital signal level.
+The person found it easier to follow and, after one requested repeat, heard
+it become quieter while remaining audible. For subjective listening, an
+uncertain result can justify trying a recognizable repeating sample before
+raising the level. Record the sample, output route, earbud use and background
+noise. This one-listener comparison did not isolate pitch variation from
+frequency content, familiarity, attention or changing noise, and does not
+establish a general advantage for melodies or equal perceived loudness.
+
+Collecting an observation must also leave the test running long enough to
+judge it. In the original Quiet Night sample, Codex brought the app forward
+to inspect its display, which stopped the preview player about 1.5 seconds
+after the down press. The person's report of inaudibility therefore could
+not isolate attenuation from playback ending. In the corrected retest,
+Codex kept the player foreground, checked continued playback and the unchanged
+route and phone volume, and left nearly 18 seconds after the press for listening.
+The person reported audible attenuation; the app's later -5 dB display was
+not an acoustic measurement. Verify the player's behavior before the case,
+keep playback running throughout the listening window, and collect any
+interrupting UI evidence afterward. Keep technical timing and the person's
+hearing report separate.
 
 The work produces evidence about the tested app version and conditions.
 An emulator result alone does not establish how a physical phone feels to
