@@ -1,6 +1,6 @@
 # Testing Android apps with a person and Codex
 
-16 November 2026. This describes our practice on that date.
+18 November 2026. This describes our practice on that date.
 
 We use one person's questions and Codex's ability to operate software tools to
 investigate Android apps. We want to find out whether selected everyday tasks
@@ -63,6 +63,37 @@ excerpts, screenshots, and tool results can be sent to the AI service as task
 context. The [documentation on local execution](https://learn.chatgpt.com/docs/enterprise/chatgpt-work-local-security)
 explains this distinction. Blocking the test device's network connection is
 a separate measure with a different purpose.
+
+### When the emulator itself fails
+
+On 18 November 2026, the person chose Android Emulator **37.3.9 Beta** for
+subsequent app tests, with stable **37.2.13** kept unchanged alongside it.
+This was a targeted response to recent emulator graphics crashes. Codex
+found that two local crash signatures matched a
+[reported gfxstream failure](https://github.com/google/gfxstream/issues/192),
+in the emulator's graphics component. Inspection of the downloaded binaries
+found relevant changes from the
+[graphics-context handling fix](https://github.com/google/gfxstream/commit/ca53620bfd8491f57099341da92fd1513ce93e06)
+in Beta; the stable version still lacked the checked null-pointer guard.
+
+Codex ran stable, Beta, then stable again from equal cloned Android 16
+(API 36) states, with 20 PDF reading/editing and app-closing cases per run.
+All 60 completed without an emulator crash, although nonfatal graphics-log
+errors remained. The original intermittent failure did not reproduce, so
+this comparison does not establish that Beta cured it or qualifies other
+Android images. Finding correction code and demonstrating its effect are
+separate results.
+
+The person also reported beginning to watch live streams during tests around
+the onset of the crashes. That is a possible contributing condition; the
+causal connection remains open. Stream windows were visible during the
+comparison without a crash, and playback conditions were not controlled.
+For subsequent tests, we record whether stream viewing is active, including
+unknown states and the source of the observation. We also record the emulator
+build and graphics settings. If the emulator crashes again, we preserve its
+logs and the full core dump—a saved image of the process's memory—privately
+before cleanup, and state if collection is missing or truncated. An emulator
+failure is recorded separately from any demonstrated failure of the app.
 
 ## How we prepare a device for a test
 
