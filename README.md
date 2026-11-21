@@ -1,6 +1,6 @@
 # Testing Android apps with a person and Codex
 
-18 November 2026. This describes our practice on that date.
+21 November 2026. This describes our practice on that date.
 
 We use one person's questions and Codex's ability to operate software tools to
 investigate Android apps. We want to find out whether selected everyday tasks
@@ -300,6 +300,44 @@ performed, so scrolling or tapping alone was not established as the cause.
 The settings failure was reported separately, and the earlier restore fix
 remained unverified because no backup was imported.
 
+### Retesting delays and queued work
+
+The Gantry runtime rounds supplemented
+[mezinster's earlier static review](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/51872#note_3990543910).
+A correction can work for the original example while leaving a related case
+uncovered. In the [Gantry 1.25.3 retest](https://github.com/mesmerverse/gantry/issues/1#issuecomment-6330942999),
+short notification sounds ended before speech. The person proposed a longer
+stock sound and heard it overlap speech. In the
+[1.25.4 retest](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/51872#note_4066956247),
+isolated long sounds worked, but a closely spaced pair brought back overlap
+and reversed the spoken order. A useful retest challenges the assumption
+behind the correction with one realistic variation within the agreed scope.
+
+Check that the decisive condition actually occurs. In the
+[23 October 1.25.5 retest](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/51872#note_4072556262),
+two notifications produced ordered speech but only one chime. That did not
+exercise the earlier two-chime condition. A
+[20 November supplementary test](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/51872#note_4281559841)
+established two audible chime starts, with the second interrupting the first.
+Codex checked notification records and player events; the person supplied
+the hearing observations. The later headphone setup did not recreate the
+earlier speaker and OS configuration.
+
+Delayed work also needs checks between accepting an input and producing its
+effect. In that supplementary test, Codex removed or replaced notifications,
+narrowed the reading scope, or locked the phone while speech waited. Old or
+newly excluded text could still be heard; private content began after confirmed
+lock. A fresh excluded reminder and an allowed message helped distinguish
+the waiting-reminder behavior from a generally ineffective setting. For a
+similar test, verify the changed state before the delayed effect and include
+a positive control, so silence cannot be mistaken for success when output is
+unavailable. Record the expected cancellation or privacy behavior explicitly;
+an observed queue policy is not automatically a defect. These are targeted
+case-selection ideas, not a requirement to expand every retest.
+The [1.25.6 correction retest](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/51872#note_4290165452)
+did not reproduce the removal, replacement or scope-change symptoms; its lock
+result retained the hearing limit described below.
+
 ### Speech input, capture and text delivery
 
 In the [Offline Voice Input 0.2.3 test](https://gitlab.com/-/project/36528/uploads/23392d155271c57cb51fcbc5bd1e3fb1/Offline-Voice-Input-0.2.3-test-report.md),
@@ -400,6 +438,13 @@ the person's request, cases were repeated one at a time, with an answer
 before the next post. A successful speech call did not establish what was
 heard or when the sounds began.
 
+An uncertain hearing result must remain uncertain. In the
+[21 November Gantry correction retest](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/51872#note_4290165452),
+the person requested a repeat after an unclear lock-screen announcement.
+The repeat supported a general app-name announcement, but its opening word
+remained uncertain. Codex retained both limits rather than completing the
+heard words from the source code or counting the first trial as another pass.
+
 In the PillSOS tests, the audio setup failed at two different layers.
 After app data was cleared in [3.2 / 96](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/53882#note_4147254249),
 Codex missed the app's return to Maximum Volume; one reminder raised the
@@ -467,6 +512,11 @@ When an approved report is published, Codex reads the public text and checks
 that its attachments are accessible and match the intended files. We retain
 that record alongside the test. Later corrections and retests keep their own
 dates and app versions.
+
+Check rendered link destinations as well as the saved text. During the
+Gantry publication above, bare issue numbers linked to unrelated issues in
+the destination project. Codex replaced them in the same comment with explicit
+links to the app's repository and verified the rendered result.
 
 In the [BetterLauncher publication](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/44511#note_4095997303),
 seven of nine separately hosted files matched the intended files byte for byte.
