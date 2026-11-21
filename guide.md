@@ -1,0 +1,557 @@
+# Testing Android apps with a person and Codex
+
+21 November 2026. This describes our practice on that date.
+
+This is the detailed method guide, with lessons from completed tests. For a
+first test, begin with the [starter instructions](starter/README.md).
+The specific tools, devices and versions below describe our recorded work;
+they are not prerequisites to copy into a new environment.
+
+We use one person's questions and Codex's ability to operate software tools to
+investigate Android apps. We want to find out whether selected everyday tasks
+work, explain problems clearly, and give developers evidence they can use.
+
+Our work has focused on apps proposed for inclusion in
+[F-Droid, a community project that distributes free and open source Android software](https://f-droid.org/en/docs/).
+The ideas here come from those tests. Someone working on a different kind of
+app may find individual parts useful without adopting our whole arrangement.
+
+## What AI does in this arrangement
+
+Codex is the AI assistant we use. It can work with files and run software tools
+when those capabilities are available to the task. A tool is a way to perform
+an action outside the conversation, such as running a command or reading a
+file. The [Codex documentation](https://learn.chatgpt.com/docs/environments/modes)
+explains how to choose where a chat's tools run.
+
+In our tests, the person describes a goal in ordinary language. Codex turns
+that goal into proposed checks, prepares the test device, operates the app
+through commands, and examines the results. It can also write small programs
+to compare data. This combination of an AI assistant and tools is often
+called an AI agent.
+
+For example, a person might want to know whether a contacts app preserves
+addresses through a backup and restore. Codex needs an actual app, a device
+on which to run it, known input values, and a way to retrieve the results.
+The app's behavior comes from running its code; Codex then interprets the
+collected evidence. Codex can make a wrong interpretation, so we retain the
+observations and comparison inputs that allow its explanation to be checked.
+
+We did not train a separate AI model for each app. We use existing tools and
+give Codex the task, relevant records, and access needed for the agreed work.
+
+## The main parts of our environment
+
+Our physical computer runs Linux, the operating system that hosts the test
+tools, temporary device files, and retained reports. These are the main pieces:
+
+| Part | What it means and what we use it for |
+| --- | --- |
+| Codex | The assistant that plans and carries out the agreed work through available tools, then explains the results. |
+| Android Emulator | A program that runs a virtual Android device on the computer. We keep its screen visible in a window. |
+| Physical Android phone or tablet | An actual device connected for an agreed test. We record its starting settings, remove test data and restore changes while preserving unrelated content. |
+| Android system image and virtual device | The image supplies the Android operating system. The virtual device combines it with settings such as screen size and separate storage for the test. |
+| APK | An Android app installation file. We record exactly which APK we install so that the result can be tied to a particular version. |
+| ADB | Android Debug Bridge, a tool connecting the computer to Android. Codex uses it to install the app, send actions, and retrieve information. |
+| Test data and small scripts | Fictional input values and short programs used for tasks such as comparing the original contacts with an exported file. |
+| Evidence and reports | Saved screenshots, text records, data comparisons, and explanations that make the work inspectable afterward. |
+
+Android's documentation explains the
+[emulator and virtual devices](https://developer.android.com/studio/run/emulator)
+and [ADB's device connection and commands](https://developer.android.com/tools/adb).
+The emulator runs the Android app even though the device itself is virtual.
+Its window also lets the person follow what is happening.
+
+Here, “local” describes where the Android device and commands run. It does
+not mean the AI model runs offline on that computer. Relevant prompts, file
+excerpts, screenshots, and tool results can be sent to the AI service as task
+context. The [documentation on local execution](https://learn.chatgpt.com/docs/enterprise/chatgpt-work-local-security)
+explains this distinction. Blocking the test device's network connection is
+a separate measure with a different purpose.
+
+### When the emulator itself fails
+
+On 18 November 2026, the person chose Android Emulator **37.3.9 Beta** for
+subsequent app tests, with stable **37.2.13** kept unchanged alongside it.
+This was a targeted response to recent emulator graphics crashes. Codex
+found that two local crash signatures matched a
+[reported gfxstream failure](https://github.com/google/gfxstream/issues/192),
+in the emulator's graphics component. Inspection of the downloaded binaries
+found relevant changes from the
+[graphics-context handling fix](https://github.com/google/gfxstream/commit/ca53620bfd8491f57099341da92fd1513ce93e06)
+in Beta; the stable version still lacked the checked null-pointer guard.
+
+Codex ran stable, Beta, then stable again from equal cloned Android 16
+(API 36) states, with 20 PDF reading/editing and app-closing cases per run.
+All 60 completed without an emulator crash, although nonfatal graphics-log
+errors remained. The original intermittent failure did not reproduce, so
+this comparison does not establish that Beta cured it or qualifies other
+Android images. Finding correction code and demonstrating its effect are
+separate results.
+
+The person also reported beginning to watch live streams during tests around
+the onset of the crashes. That is a possible contributing condition; the
+causal connection remains open. Stream windows were visible during the
+comparison without a crash, and playback conditions were not controlled.
+For subsequent tests, we record whether stream viewing is active, including
+unknown states and the source of the observation. We also record the emulator
+build and graphics settings. If the emulator crashes again, we preserve its
+logs and the full core dump—a saved image of the process's memory—privately
+before cleanup, and state if collection is missing or truncated. An emulator
+failure is recorded separately from any demonstrated failure of the app.
+
+## How we prepare a device for a test
+
+Our current entry point is Codex in the desktop app on the Linux computer.
+The person opens our app-testing project and enters requests in its chat,
+with the work set to run on this computer. The
+[local project](https://learn.chatgpt.com/docs/projects?surface=app)
+connects that chat to the folder containing our testing records.
+
+Before trying the opening request below, the person needs the desktop app
+installed and signed in, a local project folder selected, and file and
+command tools available to the chat. Their permissions must cover reading
+the relevant files and running the local checks. The agreed test also needs
+access to write its files and operate the Android tools. This connection to
+local tools is what lets Codex inspect and operate the computer from the chat.
+
+The computer needs working Android tools, a suitable system image, and enough
+resources to run the virtual device. Codex checks what is available and what
+the app requires before proposing a test. A different Android version or a
+new system-image download may be useful for a specific question; its setup
+time and effects belong in that proposal.
+
+For someone starting with an unfamiliar computer, an opening request could be:
+“Check which Android testing tools are available here and describe what would
+be needed for one visible test of this app.” This asks for an assessment before
+installing software or starting a device. In our work, Codex handles the
+technical preparation once its scope and effects are agreed.
+
+For a run, Codex prepares a temporary virtual device from a clean system image.
+Its Android version, screen size, language, and other relevant settings are
+recorded. One visible device serves the agreed test session. We reset app data
+when a particular check needs an empty starting point.
+
+For our offline tests, we also set up network isolation for the emulator and
+its control tools. Codex checks the network configuration and attempts an
+external connection to confirm that it fails. The workstation can still
+download the approved APK or read public documentation through a separate
+connection. Network blocking requires its own setup and verification.
+
+For the [Wraith test](examples/wraith-odysseus.md), which needed a remote
+service, we used a gateway to restrict connections to the agreed destinations.
+The developer supplied a temporary account, and the test used fictional
+content within a small request limit. A separate question
+was whether the network recording covered the route the app actually used.
+That recording missed the app's Wi-Fi traffic, so the report kept its limits
+separate from the useful evidence supplied by the gateway.
+
+The clean system image can be reused. The temporary device's storage,
+installed test app, and session files are removed when the run ends. This
+makes it possible to keep useful tools while starting a later test with
+fresh app data.
+
+## How a question becomes a test result
+
+Our work usually moves through the following stages. The scope changes with
+the app and the question.
+
+1. **Choose a useful question.** The person identifies an app or an area of
+   interest. Codex examines its description, existing reports, and relevant
+   source code (the program text written by developers), then proposes a
+   manageable set of checks. The proposal includes the environment, network
+   access, expected effects, and time for
+   preparation, testing, reporting, and cleanup.
+2. **Agree on the work and identify the app.** Once the task covers the
+   proposed actions, Codex proceeds within that scope. It records the APK's
+   source, version, and file hash: a fingerprint used to recognize the same
+   file later. This identifies the package tested; it does not establish that
+   its features work.
+3. **Define the inputs and expected outcome.** For a contacts test, we create
+   fictional names, phone numbers, and address fields with known values.
+   Those values provide a reference after export and restoration. We keep
+   the expectation separate from what the app happens to produce.
+4. **Act, inspect, and follow up.** Codex performs a short sequence of actions,
+   retrieves evidence, checks that the intended action occurred, and compares
+   the result with the expectation. An unexpected result may lead to a
+   focused repeat or a source-code check within the agreed scope.
+5. **Close the run and prepare the findings.** Codex removes the temporary
+   environment and verifies that its processes and files are gone. The
+   report describes the actions, expected and observed results, supporting
+   evidence, and limits. Publication follows the person's decision about
+   the content and destination.
+
+Routine choices within an approved test belong to Codex. A new goal, material
+change in effects, or publication outside the agreed scope needs a new
+decision. This keeps the person involved in choices that matter without
+requiring them to enter every command.
+
+## How Codex gets evidence from the app
+
+Our Android tests use commands to operate the device and request snapshots
+of its state. A screenshot shows what was drawn on the screen. A
+**UI tree** is a structured description of interface elements, such as
+labels and buttons. **Logs** record messages or events from the app and
+Android. Exported files and database snapshots reveal stored content.
+
+These sources answer different questions. A button may appear in the UI tree
+while its label is hidden behind another part of the screen. A list may
+look empty even though records have already been saved. We compare sources
+when the distinction affects the result.
+
+Our first physical-tablet check, on a Samsung SM-X210, showed why a larger
+screen is not enough to describe the test conditions. In
+[TEA Kids 1.1.6 / 62](https://github.com/alunoadsnoite/tea-mvp-childs/issues/4#issuecomment-6355504071),
+landscape at the existing 110% text size clipped Home content that the attempted
+vertical swipes did not reveal. At 200%, portrait also lost visible content.
+We recorded orientation, screen dimensions, effective display density and text
+scale together. A separate Help label existed in the UI tree and its target
+opened Help, yet the label was visually indistinguishable in the screenshot.
+These were two observations from one tablet configuration; their causes and
+behavior on other tablets were not established.
+
+In the [31 October BetterLauncher 1.6.2 retest](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/44511#note_4129148814),
+Codex compared retained before-and-after screenshots with their recorded
+conditions. Home foregrounds improved in the sampled scenes, while Settings
+controls remained hard to distinguish despite working and respecting system
+navigation. Theme, app text size, wallpaper and opacity affected the comparison.
+Prior Home opacity had not been separately measured, and the old and new
+landscape scenes used different themes and text sizes. The report states
+those limits rather than treating the scenes as identical.
+
+Codex receives the observations that its tools return. It needs a fresh
+observation after an action that changes the screen or data. A command that
+completed successfully may still have entered text into the wrong field.
+Such attempts are recorded as problems with the test operation and corrected
+before drawing conclusions about the app.
+
+In the [DumberKit Contacts example](examples/dumberkit-contacts.md), a backup contained
+all five contacts, yet parts of two addresses were missing. Counting the
+contacts would have missed the problem. Comparing individual fields with the
+known starting values exposed it.
+
+A restore also needs checking where the data was previously sent. In the
+[BP Digitizer 1.6.4 test](https://github.com/zandaulion/BloodPressureMonitor/issues/14),
+Codex first checked that repeating a sync left the sampled Health Connect
+counts unchanged. It then kept those external records, cleared the app's
+local data, restored two readings in reverse order and synced again. The
+local IDs changed and Health Connect showed a duplicate heart-rate entry.
+This adds a boundary to backup testing: compare the retained destination
+before and after restoration and sync, as well as the restored local fields.
+The test did not establish the identity of every blood-pressure record.
+
+The [PillSOS 3.3 / 97 retest](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/53882#note_4149289891)
+also distinguished a saved reminder, its pending Android schedule, and an
+actual delivery. Tomorrow's occurrence remained scheduled after today's
+reminder was dismissed; next-day delivery was not observed. A separate pair
+checked whether dismissing reminder A affected reminder B. Codex inspected
+B's pending schedule and observed B deliver at its due time, without opening
+or editing the app between dismissal and delivery. Those actions could
+refresh schedules and conceal interference between reminders. The result
+covers that pair and sequence, not long-term reminder reliability.
+
+In focused supplementary checks of
+[Heimdall 1.0.4 / 5](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/49431#note_4156915767),
+following [junkerderprovinz's review of 1.0.3](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/49431#note_4116396624),
+Codex captured SMS delivery evidence before changing filtering rules. The app
+reclassified old messages when rules changed, so their final labels did not
+describe the original delivery decisions. The active rule, stored-message
+checks and notifications were retained with each comparison. When an app
+reevaluates past events, evidence needs to preserve the configuration and
+outcome at the time of the event, before a later change alters its presentation.
+
+The same round's [legacy-rule comparison](https://github.com/monkeyscript/heimdall/issues/3)
+started with a focused source review. A cleanup check removed stored keywords
+when they equalled an exact former default set. On the fresh installation,
+manually adding the eighth word cleared all rules; the same SMS was blocked
+before clearing and delivered afterward. This is extremely unlikely in
+ordinary use, but possible with those eight particular words and no others.
+The lesson is to consider whether ordinary user actions can recreate a
+configuration that triggers legacy cleanup. One targeted comparison can
+answer that question; this fresh-install result did not verify an upgrade path.
+
+The [PsyJournal test report](https://github.com/FSeixasPT/PsyJournal/issues/1)
+also records failures in the evidence tools themselves. Android's usual UI
+dump command could not obtain an idle screen while a live timer was active.
+Codex used an alternative that did not wait for idle, checked that the output
+was new and contained interface elements, and compared it with screenshots.
+An older tree, an empty tree, and black screenshots were not treated as proof
+of the app's visible state. A successful command alone is not enough.
+
+The person's question about PsyJournal's browser links led to a separate
+source-code review. An app's lack of Internet permission does not by itself
+answer what information it passes to another app that opens a link. Codex
+traced the addresses supplied by PsyJournal 12.0: the reviewed paths did not
+append diary entries, doses, or notes, but a selected article address could
+reveal the substance of interest. This was evidence about the app's URL
+construction; the test did not observe browser traffic or the linked sites.
+
+In the [Violentomètres 1.1.1 test](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/52094#note_4087047253),
+Android's system screenshot showed a black app area. Codex obtained readable
+images through the [emulator's own screenshot command](https://developer.android.com/studio/run/emulator-take-screenshots),
+with the app's default screenshot refusal and Android's `FLAG_SECURE`
+protection still enabled. Early captures showed a transition or the previous
+screen, so fresh images after visible changes were checked against the UI
+tree and window state. This established an observation method for the tested
+Android 14 emulator configuration. It did not establish screenshot access
+for ordinary Android apps or capture behavior on physical phones.
+
+In the [BetterLauncher 1.6.0 retest](https://github.com/pierspad/BetterLauncher/issues/7),
+Codex recorded settings crashes on an emulator and a physical phone before
+backup import. Three emulator crash stacks involved accessibility-node
+collection during UI-tree inspection. The report retained those reads as
+part of the reproduction conditions. No comparison without inspection was
+performed, so scrolling or tapping alone was not established as the cause.
+The settings failure was reported separately, and the earlier restore fix
+remained unverified because no backup was imported.
+
+### Retesting delays and queued work
+
+The Gantry runtime rounds supplemented
+[mezinster's earlier static review](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/51872#note_3990543910).
+A correction can work for the original example while leaving a related case
+uncovered. In the [Gantry 1.25.3 retest](https://github.com/mesmerverse/gantry/issues/1#issuecomment-6330942999),
+short notification sounds ended before speech. The person proposed a longer
+stock sound and heard it overlap speech. In the
+[1.25.4 retest](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/51872#note_4066956247),
+isolated long sounds worked, but a closely spaced pair brought back overlap
+and reversed the spoken order. A useful retest challenges the assumption
+behind the correction with one realistic variation within the agreed scope.
+
+Check that the decisive condition actually occurs. In the
+[23 October 1.25.5 retest](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/51872#note_4072556262),
+two notifications produced ordered speech but only one chime. That did not
+exercise the earlier two-chime condition. A
+[20 November supplementary test](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/51872#note_4281559841)
+established two audible chime starts, with the second interrupting the first.
+Codex checked notification records and player events; the person supplied
+the hearing observations. The later headphone setup did not recreate the
+earlier speaker and OS configuration.
+
+Delayed work also needs checks between accepting an input and producing its
+effect. In that supplementary test, Codex removed or replaced notifications,
+narrowed the reading scope, or locked the phone while speech waited. Old or
+newly excluded text could still be heard; private content began after confirmed
+lock. A fresh excluded reminder and an allowed message helped distinguish
+the waiting-reminder behavior from a generally ineffective setting. For a
+similar test, verify the changed state before the delayed effect and include
+a positive control, so silence cannot be mistaken for success when output is
+unavailable. Record the expected cancellation or privacy behavior explicitly;
+an observed queue policy is not automatically a defect. These are targeted
+case-selection ideas, not a requirement to expand every retest.
+The [1.25.6 correction retest](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/51872#note_4290165452)
+did not reproduce the removal, replacement or scope-change symptoms; its lock
+result retained the hearing limit described below.
+
+### Speech input, capture and text delivery
+
+In the [Offline Voice Input 0.2.3 test](https://gitlab.com/-/project/36528/uploads/23392d155271c57cb51fcbc5bd1e3fb1/Offline-Voice-Input-0.2.3-test-report.md),
+the person recorded short English and Finnish passages. Codex reused the clips
+for file, caption and speaker-to-microphone checks. The person heard all four
+clips and noticed no omissions, but could not certify every word from memory.
+A script describes intended speech; checking the saved audio is a separate
+step. Keep the text visible while the person reads, and compare one short
+passage at a time when exact wording matters. Record uncertainty instead of turning a
+general listening confirmation into a word-for-word check.
+
+The audio route also changes what a comparison establishes. Reading a file,
+capturing internal playback and replaying sound through a speaker into a
+microphone are different paths. Background music affected early microphone
+attempts; Codex excluded them and repeated the relevant checks in quiet
+conditions. In other attempts, Android silenced the target microphone or
+muted the helper player. Check source playback and capture state before
+attributing unexpected text or omissions to recognition. A recording indicator
+alone does not establish that speech reached the recognizer.
+
+Processing and delivery need separate evidence too. After recording stopped,
+[going Home during processing left the fields unchanged](https://github.com/notune/android_transcribe_app/issues/140),
+whereas [changing focus sent the result to the new field](https://github.com/notune/android_transcribe_app/issues/141).
+Codex used distinct field markers, screenshots and text readback to establish
+the destinations. For asynchronous text input, retain the request and input
+identity, check focus at the relevant transitions, and read the final field
+contents. These results concern one phone, operating system and model;
+they do not measure general multilingual accuracy or cross-app behavior.
+
+### Before a time-sensitive test
+
+Before a timed step, Codex starts timestamped event recording and checks that
+the recorder is running. For example, when testing a reminder, we record the
+action that sets it and keep recording through its expected delivery time.
+If the notification appears, we can compare the two timestamps even if the
+chat paused in between.
+
+Permission changes and old notification buttons also need separate checks.
+In BP Digitizer, restoring exact-alarm permission removed the warning but
+[did not recreate the canceled schedules](https://github.com/zandaulion/BloodPressureMonitor/issues/17).
+Codex observed that scheduling state; it did not wait for or claim a missed
+next-day reminder. Separately, an old notification's Snooze button
+[scheduled and delivered a new reminder after reminders were switched off](https://github.com/zandaulion/BloodPressureMonitor/issues/20).
+Codex removed the old notification and verified its absence before the due
+time, so a retained notification could not be mistaken for a new delivery.
+These cases distinguish the visible setting, pending work and actual delivery.
+
+Codex can ask the person running the test at any time whether the chat's
+context indicator shows that the conversation is getting full. If a context
+check or compaction would help, we do it before the timed step or between
+trials.
+
+## What the person contributes
+
+The person chooses what matters, considers Codex's proposal, and can redirect
+the work when something important is missing. During the DumberKit test, the
+person asked for automatic-backup checks after the original checks were
+finished. That request led to an additional finding and a change in our
+future planning.
+
+Codex performed the technical test execution, evidence collection, analysis,
+and report writing in that example. Watching the emulator or approving the
+report did not constitute independent verification. Reports describe any
+human observation or independent check only when it actually occurred.
+
+The person providing the tablet for the TEA Kids check had no knowledge of
+Portuguese, the app's interface language. Codex operated the app and interpreted
+its labels, retaining the original wording alongside English explanations.
+The person viewed the final state. This was scoped functional and layout
+evidence; it did not establish Portuguese-language quality, independent human
+verification or suitability for children.
+
+Some questions also need a physical phone. In the
+[AutoScroller test](https://github.com/sebacoden/autoScroll/issues/1), the
+person performed swipes and three-finger taps while Codex prepared and
+navigated the phones, collected screen and input evidence, and analyzed
+the results. A touchscreen log established that three contacts overlapped;
+it did not establish which gesture reached the app. Comparing two phones
+did not isolate the operating system when the video app and installed
+services also differed.
+
+For a brief physical event, the person may need to trigger the critical
+action directly. In the
+[BP Digitizer camera checks](https://gitlab.com/-/project/36528/uploads/9cbfd59a02b19d2e32090537612880f2/BP-Digitizer-1.6.4-test-report-2026-11-12.md),
+the Beurer BM 28 display switched off quickly, making chat-coordinated
+capture unreliable. The person operated the shutter for specified cases
+while Codex recorded and inspected the sequence. Codex compared recognized
+values with the display in the captured image, rather than an earlier
+message that could refer to a different memory reading. Three qualified
+images matched. Camera evidence remains private; the public report describes
+the results and limits without providing those images for independent review.
+
+Audible behavior also needs a listener or an audio recording. In the
+[Gantry test](https://github.com/mesmerverse/gantry/issues/1), Codex posted
+synthetic notifications and inspected settings and logs; the person reported
+what the phone actually said and when the notification chime occurred. At
+the person's request, cases were repeated one at a time, with an answer
+before the next post. A successful speech call did not establish what was
+heard or when the sounds began.
+
+An uncertain hearing result must remain uncertain. In the
+[21 November Gantry correction retest](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/51872#note_4290165452),
+the person requested a repeat after an unclear lock-screen announcement.
+The repeat supported a general app-name announcement, but its opening word
+remained uncertain. Codex retained both limits rather than completing the
+heard words from the source code or counting the first trial as another pass.
+
+In the PillSOS tests, the audio setup failed at two different layers.
+After app data was cleared in [3.2 / 96](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/53882#note_4147254249),
+Codex missed the app's return to Maximum Volume; one reminder raised the
+alarm and ring levels. In [3.3 / 97](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/53882#note_4149289891),
+the emulator's stream was muted on the host computer despite the Android
+settings. The approved repeat supplied recorded output after unmuting.
+Before playback, checks therefore need to cover the app's mode, Android's
+relevant volume and output route, and the host's emulator stream. Clearing
+app data invalidates earlier app-setting checks. A recording and the person's
+hearing remain separately attributed observations.
+
+Choosing the sound also affects whether a person can follow an audio test.
+In the [Quiet Night 2.2.0 test and hearing retest](https://gitlab.com/-/project/36528/uploads/3498ad1f1e4c0f0b5e246032eace723e/QuietNight-2.2.0-test-report.md),
+the person could not reliably judge a constant tone amid intermittent desktop
+hum. At their request, Codex substituted a repeating melody without raising
+the phone's 2/25 media setting or the file's average digital signal level.
+The person found it easier to follow and, after one requested repeat, heard
+it become quieter while remaining audible. For subjective listening, an
+uncertain result can justify trying a recognizable repeating sample before
+raising the level. Record the sample, output route, earbud use and background
+noise. This one-listener comparison did not isolate pitch variation from
+frequency content, familiarity, attention or changing noise, and does not
+establish a general advantage for melodies or equal perceived loudness.
+
+Collecting an observation must also leave the test running long enough to
+judge it. In the original Quiet Night sample, Codex brought the app forward
+to inspect its display, which stopped the preview player about 1.5 seconds
+after the down press. The person's report of inaudibility therefore could
+not isolate attenuation from playback ending. In the corrected retest,
+Codex kept the player foreground, checked continued playback and the unchanged
+route and phone volume, and left nearly 18 seconds after the press for listening.
+The person reported audible attenuation; the app's later -5 dB display was
+not an acoustic measurement. Verify the player's behavior before the case,
+keep playback running throughout the listening window, and collect any
+interrupting UI evidence afterward. Keep technical timing and the person's
+hearing report separate.
+
+The work produces evidence about the tested app version and conditions.
+An emulator result alone does not establish how a physical phone feels to
+use, whether an app suits a particular group of people, or how reliably a
+background feature runs for weeks. Those questions need their own evidence.
+
+## How the practice grows
+
+We first tried to design a general testing framework, then an adaptable
+starting system for creating test environments. Our present practice has
+grown through individual app tests and the problems they exposed.
+
+We keep shared working instructions in text files, an app-specific record of
+what happened and what may happen next, and the original evidence behind each
+report. This lets a later conversation recover the relevant context. A
+report can include an **issue**, meaning a separately described problem in
+a tracking system, with steps to reproduce it. We normally use the
+developer's tracker. For Wraith, the person had no login credentials for
+that tracker and chose this repository instead. The F-Droid summary explains
+the reason and links the findings; they remain reports in our own repository.
+
+Repeated work sometimes justifies a small helper. After the DumberKit test,
+Codex built a tool that saves a test phase's screenshot, UI tree, and
+background information together. It was checked separately using Android 16's
+Settings app. It did not perform the earlier DumberKit test, and it does not
+decide whether an app passed.
+
+When an approved report is published, Codex reads the public text and checks
+that its attachments are accessible and match the intended files. We retain
+that record alongside the test. Later corrections and retests keep their own
+dates and app versions.
+
+Check rendered link destinations as well as the saved text. During the
+Gantry publication above, bare issue numbers linked to unrelated issues in
+the destination project. Codex replaced them in the same comment with explicit
+links to the app's repository and verified the rendered result.
+
+In the [BetterLauncher publication](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/44511#note_4095997303),
+seven of nine separately hosted files matched the intended files byte for byte.
+The hosting service changed metadata in two JPEG images, while their encoded
+picture data and decoded pixels matched exactly. Codex recorded the original
+and served file hashes and verified the exact original images inside the
+[evidence ZIP](https://gitlab.com/-/project/36528/uploads/b1be1c65d5ea574e4853588aeecfd7ae/betterlauncher-1.6.0-settings-crash-report-and-evidence.zip).
+
+The same [BetterLauncher 1.6.2 publication](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/44511#note_4129148814)
+also separated file integrity from recipient access. After anonymous
+downloads returned HTTP 429, Codex downloaded the archive while authenticated
+and verified its exact bytes and all content hashes. The person explicitly
+approved completing publication with anonymous availability still unverified.
+That exception is recorded in the publication receipt. An authenticated
+match establishes the content served through that route; it does not prove
+that a reader without an account can download it.
+
+After PsyJournal, we agreed to publish an approved package in dependency
+order: attachments, the full report, and individual issues first; verify
+their contents and links; then publish the F-Droid MR summary with those
+links already included. This avoids a predictable follow-up edit while
+leaving room for later factual corrections.
+
+The [DumberKit Contacts example](examples/dumberkit-contacts.md) follows a
+backup test through cleanup and reporting, including mistakes in our
+operation and a lesson for later test plans. The
+[Wraith example](examples/wraith-odysseus.md) examines the limits of network
+evidence and shows how the person's screenshot question improved the report.
+
+Codex wrote and translated this overview at the person's request, using the
+project's records and the linked documentation for tool explanations.
+
+[Start here](README.md) · [Reuse and license](README.md#reuse-and-license).

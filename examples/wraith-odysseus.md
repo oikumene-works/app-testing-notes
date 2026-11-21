@@ -110,4 +110,4 @@ explains that choice and links the reports and
 Codex checked the published texts and attachment contents at publication
 time. The test closed with no background monitoring.
 
-[Overview of our testing practice](../README.md).
+[Method and lessons](../guide.md) · [Start a test](../starter/README.md).

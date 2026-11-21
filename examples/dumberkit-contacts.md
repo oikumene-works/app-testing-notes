@@ -142,4 +142,4 @@ additional request exposed a path Codex had omitted from the original scope.
 Our questions now include whether the next run remains scheduled and whether
 the original content can be recovered, alongside whether a file is created.
 
-[Overview of our testing practice](../README.md).
+[Method and lessons](../guide.md) · [Start a test](../starter/README.md).
